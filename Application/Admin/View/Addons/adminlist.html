@@ -1,0 +1,12 @@
+<extend name="Public/base"/>
+
+<block name="body">
+    <php>
+        $addon_name     =   trim(I('get.name'));
+        $addon_run         =   trim(I('get.run'));
+        $class          =   get_addon_class($addon_name);
+        $addons  =   new $class;
+        $info = $addons->info;
+        $addons->$addon_run();
+    </php>
+</block>

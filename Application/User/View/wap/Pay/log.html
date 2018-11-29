@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>充值记录</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link href="__WAPCSS__/ratchet.min.css" rel="stylesheet">
+    <link href="__WAPCSS__/app.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="bar bar-nav" style="padding-left: 0px">
+      <a href="javascript:history.back();" class="icon icon-left pull-left"></a>
+      <h1 class="title">充值记录</h1>
+      <a href="{:U('home/index/index')}" class="icon icon-home pull-right"></a>
+      <a href="{:U('index/index')}" class="icon icon-person pull-right"></a>
+    </header>
+
+    <div class="content">
+        <ul class="table-view top1">
+            <li class="table-view-cell right-no-padding">
+                <div class="ls-left"><h5>内容</h5></div>
+                <div class="ls-center"><h5>充值时间</h5></div>
+                <div class="ls-right"><h5>充值类型</h5></div>
+            </li>
+            <notempty name="_list">
+            <volist name="_list" id="vo">
+            <li class="table-view-cell right-no-padding">
+                <div class="ls-left">{$vo.remark}</div>
+                <div class="ls-center"><p>{$vo.create_time|time_format=###,"Y-m-d H:i"}</p></div>
+                <div class="ls-right text-center"><switch name="vo.type"><case value="1">充值卡</case><case value="2">在线充值</case></switch></div>
+            </li>
+            </volist>
+            </notempty>                   
+        </ul>
+    </div>
+    <div class="text-center">
+        <div class="pages">
+            {$_page}
+        </div>
+    </div>
+  </body>
+</html>

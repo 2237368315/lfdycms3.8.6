@@ -1,0 +1,62 @@
+<extend name="Public/base"/>
+
+<block name="body">
+    <div class="panel admin-panel">
+    	<div class="panel-head"><strong>模板管理</strong></div>
+        <div class="padding border-bottom">
+			<div class="button-group button-group-small">
+            <button type="button" class="button dropdown-toggle">模版类型<span class="downward"></span></button>
+                <ul class="drop-menu">
+                    <li><a href="{:U('market')}">全部模版</a></li>
+                    <li><a href="{:U('market',array('type'=>'web'))}">电脑模版</a></li>
+                    <li><a href="{:U('market',array('type'=>'wap'))}">手机模版</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="line-middle">
+                <volist name="lists" id="vo">
+                    <div class="xl12 xs6 xm4 xb3 text-center">
+                        <div class="clearfix padding badge-corner">
+                            <eq name="vo['free']" value="1"><span class="badge bg-red text-big">免费</span></eq>
+                            <a href="#" style="height: 170px;overflow: hidden;display: inline-block;">
+                                <img src="{$vo['pic']}" class="radius img-responsive">
+                            </a>
+                            <div class="padding">
+                            	<strong>{$vo['title']}</strong><em>-{:explode("/",$vo['file_dir'])[3]}</em>
+                                <div class="margin-top">
+                                    <button class="button bg-blue down" url="{:U('down',array('file_dir'=>urlencode($vo['file_dir'])))}"><span class="icon-cloud-download"></span> 下载模版</button>
+                                    <button class="button bg-green details"><span class="icon-search-plus"></span> 查看详情</button>
+                                </div>
+                            </div>
+                            <div class="hidden" id="details">{:str_replace('/Uploads',C('UPDATE_URL').'/Uploads',htmlspecialchars_decode($vo['content']))}</div>
+                        </div>
+                    </div>
+                </volist>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="script">
+<js href="__STATIC__/layer/layer.js" />
+<script type="text/javascript">
+    $('.details').click(function() {
+        layer.open({
+          type: 1,
+          area: ['800px', '600px'],
+          content: $(this).parent().parent().next('[id="details"]').html()
+        });
+    });
+    $('.down').click(function() {
+        layer.open({
+            type: 2,
+            area: ['800px', '600px'],
+            fix: false,
+            maxmin: true,
+            content: $(this).attr('url')
+        });
+    });
+	highlight_subnav('{:U('Template/market')}');
+</script>
+</block>

@@ -1,0 +1,56 @@
+<extend name="Public/base"/>
+
+<block name="body">
+    <div class="panel admin-panel">
+    	<div class="panel-head"><strong>{$meta_title}</strong></div>
+        <div class="panel-body">
+            <div class="line-middle">
+                <volist name="lists" id="vo">
+                    <div class="xl12 xs6 xm4 xb3 text-center">
+                        <div class="clearfix padding badge-corner">
+                            <eq name="vo['free']" value="1"><span class="badge bg-red text-big">免费</span></eq>
+                            <a href="#" style="height: 170px;overflow: hidden;display: inline-block;">
+                                <img src="{$vo['pic']}" class="radius img-responsive">
+                            </a>
+                            <div class="padding">
+                            	<strong>{$vo['title']}</strong>
+                                <div class="margin-top">
+                                    <switch name="vo.state">
+                                        <case value="1"><button class="button bg-yellow down" url="{:U('down',array('file_dir'=>urlencode($vo['file_dir'])))}"><span class="icon-cloud-download"></span> 更新插件</button></case>
+                                        <case value="2"><button class="button bg-blue" disabled="disabled"><span class="icon-cloud"></span> 已安装</button></case>
+                                        <default /><button class="button bg-blue down" url="{:U('down',array('file_dir'=>urlencode($vo['file_dir'])))}"><span class="icon-cloud-download"></span> 安装插件</button>
+                                    </switch>
+                                    <button class="button bg-green details"><span class="icon-search-plus"></span> 查看详情</button>
+                                </div>
+                            </div>
+                            <div class="hidden" id="details">{:str_replace('/Uploads',C('UPDATE_URL').'/Uploads',htmlspecialchars_decode($vo['content']))}</div>
+                        </div>
+                    </div>
+                </volist>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="script">
+<js href="__STATIC__/layer/layer.js" />
+<script type="text/javascript">
+    $('.details').click(function() {
+        layer.open({
+          type: 1,
+          area: ['800px', '600px'],
+          content: $(this).parent().parent().next('[id="details"]').html()
+        });
+    });
+    $('.down').click(function() {
+        layer.open({
+            type: 2,
+            area: ['800px', '600px'],
+            fix: false,
+            maxmin: true,
+            content: $(this).attr('url')
+        });
+    });
+	highlight_subnav('{:U('Template/market')}');
+</script>
+</block>

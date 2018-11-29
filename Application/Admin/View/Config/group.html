@@ -1,0 +1,95 @@
+<extend name="Public/base"/>
+<block name="body">
+    <js href="__STATIC__/uploadify/jquery.uploadify.min.js" />
+    <div class="tab">
+      <div class="tab-head">
+        <ul class="tab-nav">
+        <volist name="Think.config.CONFIG_GROUP_LIST" id="group">
+			<li <eq name="id" value="$key">class="active"</eq>><a href="{:U('?id='.$key)}">{$group}配置</a></li>&nbsp;
+		</volist>
+        </ul>
+      </div>
+      <div class="tab-body">
+        <br />
+        <form method="post" class="form-x" action="{:U('save')}">
+        <div class="tab-panel active" id="tab-set">
+            <volist name="list" id="config">
+                <div class="form-group">
+                    <div class="label"><label>{$config.title}</label></div>
+                    <div class="field">
+                        <switch name="config.type">
+                            <case value="0">
+                                <input type="text" class="input input-auto" size="30" name="config[{$config.name}]" value="{$config.value}" placeholder="{$config.remark}" data-validate="required:请填写{$config.title}" />
+                            </case>
+                            <case value="1">
+                                 <input type="text" class="input input-auto" size="50" name="config[{$config.name}]" value="{$config.value}" placeholder="{$config.remark}" data-validate="required:请填写{$config.title}" />
+                            </case>
+                            <case value="2">
+                                <textarea name="config[{$config.name}]" class="input input-auto" rows="5" cols="50" placeholder="{$config.remark}" data-validate="required:请填写{$config.title}">{$config.value}</textarea>
+                            </case>
+                            <case value="3">
+                                <textarea name="config[{$config.name}]" class="input input-auto" rows="5" cols="50" placeholder="{$config.remark}" data-validate="required:请填写{$config.title}">{$config.value}</textarea>
+                            </case>
+                            <case value="4">
+                                <select name="config[{$config.name}]" class="input input-auto" data-validate="required:请选择{$config.title}">
+                                    <volist name=":parse_config_attr($config['extra'])" id="vo">
+                                        <option value="{$key}" <eq name="config.value" value="$key">selected</eq>>{$vo}</option>
+                                    </volist>
+                                </select>
+                            </case>
+                            <case value="5">
+                                <textarea name="config[{$config.name}]" class="input input-auto" rows="5" cols="50" placeholder="{$config.remark}" data-validate="required:请填写{$config.title}">{$config.value}</textarea>
+                            </case>
+                            <case value="6">
+                                <input type="text" class="input input-auto" size="50" name="config[{$config.name}]" value="{$config.value}" placeholder="{$config.remark}" readonly="true" />
+                            </case>
+                            <case value="7">
+                                <div class="input-group" style="width: 377px">
+                                    <input type="text" class="input input-auto" size="50" id="upload_input_{$config.name}" name="config[{$config.name}]" value="{$config.value}">
+                                    <span class="addbtn">
+                                        <button type="button" id="upload_{$config.name}" class="button open_movie">上传图片</button>
+                                    </span>
+                                </div>
+                                <script type="text/javascript">
+                                    $("#upload_{$config.name}").uploadify({
+                                    "height"          : 34,
+                                    "swf"             : "__STATIC__/uploadify/uploadify.swf",
+                                    "fileObjName"     : "download",
+                                    "buttonClass"     :  "button",
+                                    "buttonText"      : "上传图片",
+                                    "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+                                    "width"           : 100,
+                                    'removeTimeout'   : 1,
+                                    'fileTypeExts'    : '*.jpg; *.png; *.gif;',
+                                    "onUploadSuccess" : uploadPicture,
+                                    'onFallback' : function() {
+                                        alert('未检测到兼容版本的Flash.');
+                                    }
+                                });
+                                function uploadPicture(file, data){
+                                    var data = $.parseJSON(data);
+                                    var src = '';
+                                    if(data.status){
+                                        src = data.url || data.path.substr(1);
+                                        $("#upload_input_{$config.name}").val(src);
+                                    }
+                                }
+                                </script>
+                            </case>
+                            <case value="8">
+                                <volist name=":parse_config_attr($config['extra'])" id="vo">
+                                    <label class="margin-right" style="line-height:34px;"><input name="config[{$config.name}][]" type="checkbox" value="{$key}" <in name="key" value="$config['value']">checked="checked"</in>>{$vo}</label>
+                                </volist>
+                            </case>
+                        </switch>
+                        <div class="input-note">{$config.remark}</div>
+                    </div>
+                </div>
+            </volist>
+        </div>
+        <br>
+        <div class="form-button"><button class="button bg-main ajax-post" type="submit" target-form="form-x">提 交</button></div>
+        </form>
+      </div>
+    </div>
+</block>
